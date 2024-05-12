@@ -1,6 +1,6 @@
 import requests
 from abc import ABC, abstractmethod
-from vacancy import Vacancy
+from src.vacancy import Vacancy
 
 
 class HH(ABC):
@@ -26,9 +26,6 @@ class HeadHunterAPI(HH):
     def __repr__(self):
         return f'url = {self.__url}, params = text: {self.__params["text"]}, page: {self.__params["page"]}, per_page: {self.__params["per_page"]}'
 
-    @property
-    def get_vacancies(self):
-        return self.__vacancies
     @property
     def get_params(self):
         return self.__params
@@ -73,3 +70,4 @@ class HeadHunterAPI(HH):
                 pass
             else:
                 self.__vacancies.append(vacancy)
+        return self.__vacancies
