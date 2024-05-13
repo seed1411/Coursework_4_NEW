@@ -46,7 +46,7 @@ class HeadHunterAPI(HH):
             vacancies = response.json()['items']
             vacancies_list.extend(vacancies)
             self.__params['page'] += 1
-            return vacancies_list
+        return vacancies_list
 
     def cast_to_object_list(self, vacancies: list):
         """

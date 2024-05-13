@@ -16,6 +16,7 @@ def id_area() -> str:
         for value in range(len(response_json) - 1):
             if country in response_json[value]['name'] and len(response_json[value]['areas']) != 0:
                 indicator -= 1
+                print("Подождите, идет загрузка ...")
                 return response_json[value]['id']
         else:
             print("Вакансий для трудоустройства в данной стране нет. Выберите другую страну: ")
@@ -33,7 +34,6 @@ def sort_currency(vacancies) -> list:
     indicator = True
     while indicator:
         currency = input("\nВведите интересующие валюты зарплаты: (По умолчанию RUR), KZT, BYR, UZS, USD, KGS): ").replace(",", " ").upper().strip().split()
-
         if len(currency) == 0:
             print("Применена валюта по умолчанию.")
             return vacancies
@@ -62,26 +62,21 @@ def sort_salary(vacancies: list) -> list:
     while indicator:
         try:
             #  Цифровое значение
-            salary = input("\nВведите диапазон зарплаты в формате 'от - до':\n").replace(" ", "").split("-")
-            if not len(salary) == 0:
+            salary = input("\nВведите желаемую зарплату: ").replace(" ", "").strip()
+            if salary == "":
+                print("Применены параметры по умолчанию.")
                 salary_for = 0
-                salary_to = 10000000000
             else:
-                salary_for = int(salary[0])
-                salary_to = int(salary[1])
+                salary_for = int(salary)
         except ValueError:
             print("Данные внесены не корректно.")
         else:
-            if salary_for < salary_to:
-                sort_vacancies = []
-                for vacancy in vacancies:
-                    if salary_for <= vacancy.salary_for or salary_for == 0:
-                        if salary_to <= vacancy.salary_to or vacancy.salary_to == 0:
-                            sort_vacancies.append(vacancy)
-                indicator -= 1  # индикатор для остановки цикла
-                return sort_vacancies
-            else:
-                print("\nВведен некорректный диапазон зарплаты.", sep="")
+            sort_vacancies = []
+            for vacancy in vacancies:
+                if salary_for <= vacancy.salary_for:
+                    sort_vacancies.append(vacancy)
+            indicator -= 1  # индикатор для остановки цикла
+            return sort_vacancies
 
 
 def sort_schedule(vacancies: list) -> list:
@@ -90,23 +85,27 @@ def sort_schedule(vacancies: list) -> list:
     :param vacancies: Список вакансий
     :return: Сортированный список вакансий
     """
+    sort_vacancies = []
     indicator = 1
     while indicator:
-        schedule = input("Введите желаемый график работы (Полный, Сменный, Гибкий, Удаленный) По умолчанию все валюты: ").title().strip()
-        if not schedule:
+        schedule = input("\nВведите желаемый график работы (Полный, Сменный, Гибкий, Удаленный) По умолчанию - Все: ").replace(",", " ").title().strip().split()
+        if schedule[0] == "":
             print("Применен параметр по умолчанию.")
             indicator -= 1
             return vacancies
-        if schedule in ("Полный", "Сменный", "Гибкий", "Удаленный"):
-            sort_vacancies = []
-            for vacancy in vacancies:
-                vacancy_split = vacancy.schedule.split()
-                if vacancy_split[0] == schedule:
-                    sort_vacancies.append(vacancy)
-            indicator -= 1  # индикатор для остановки цикла
-            return sort_vacancies
-        else:
-            print("Введен некорректный график.\n")
+        elif len(schedule) >= 1:
+            for value in schedule:
+                if value in ("Полный", "Сменный", "Гибкий", "Удаленный"):
+                    for vacancy in vacancies:
+                        vacancy_split = vacancy.schedule.split()
+                        if vacancy_split[0] == value:
+                            sort_vacancies.append(vacancy)
+                    indicator = 0  # индикатор для остановки цикла
+                else:
+                    indicator = 1
+                    sort_vacancies = []
+                    print("Введен некорректный график.\n")
+    return sort_vacancies
 
 
 def sort_job_title():
@@ -134,3 +133,5 @@ def sort_job_title():
     else:
         print("\nПо вашему запросу вакансий не найдено")
         quit()
+
+

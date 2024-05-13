@@ -42,7 +42,7 @@ class Vacancy:
         day = int(published_at[1])
         days_ago = None
         if day == 0:
-            days_ago = f"Опубликовано сегодня. {out_red_text("ОТКЛИКАЙСЯ ПОКА НОВАЯ!!!")}\n"
+            days_ago = f"Опубликовано сегодня. {out_red_text("БУДЬ ПЕРВЫМ!!!")}\n"
         elif day in range(5, 21) or day in range(1005, 1021) or day % 10 in range(5, 10) or day % 10 == 0:
             days_ago = f"Опубликовано {published_at[1]} дней назад.\n"
         elif day % 10 in (2, 3, 4):
