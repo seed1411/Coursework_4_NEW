@@ -6,11 +6,11 @@ from src.headhunter_api import HeadHunterAPI
 def id_area() -> str:
     """
     Функция проверки веденного пользователем страны, региона, города.
-    :return: id страны, в которой пользователь ищет работу
+    :return: Id страны, в которой пользователь ищет работу
     """
     indicator = 1
     while indicator:
-        country = input(f"Введите страну в которой ищите работу: ").title().strip()
+        country = input(f"\nВведите страну в которой ищите работу: ").title().strip()
         response = requests.get('https://api.hh.ru/areas')
         response_json = response.json()
         for value in range(len(response_json) - 1):
@@ -18,7 +18,7 @@ def id_area() -> str:
                 indicator -= 1
                 return response_json[value]['id']
         else:
-            print("Вакансий для трудоустройства в данной стране нет. Повторите ввод.\n")
+            print("Вакансий для трудоустройства в данной стране нет. Выберите другую страну: ")
             continue
 
 
@@ -29,13 +29,26 @@ def sort_currency(vacancies) -> list:
     :param vacancies: список вакансий
     :return: отсортированный список вакансий
     """
-    currency = input("Введите валюту зарплаты (RUR, KZT, BYR, UZS, USD). По умолчанию: RUR: ").upper().strip()
-    if currency in ("RUR", "KZT", "BYR", "UZS", "USD"):
-        currency_correct = currency
-    else:
-        print("Введена некорректная валюта. Применена валюта по умолчанию: RUR")
-        currency_correct = "RUR"
-    vacancies_sort = [vacancy for vacancy in vacancies if vacancy.currency == currency_correct]
+    vacancies_sort = []
+    indicator = True
+    while indicator:
+        currency = input("\nВведите интересующие валюты зарплаты: (По умолчанию RUR), KZT, BYR, UZS, USD, KGS): ").replace(",", " ").upper().strip().split()
+
+        if len(currency) == 0:
+            print("Применена валюта по умолчанию.")
+            return vacancies
+        else:
+            for value in currency:
+                if value in ("RUR", "KZT", "BYR", "UZS", "USD", "KGS"):
+                    indicator = False
+                    for vacancy in vacancies:
+                        if value == vacancy.currency:
+                            vacancies_sort.append(vacancy)
+                else:
+                    indicator = True
+                    vacancies_sort = []
+                    print("\nВведена некорректная валюта", end="")
+                    break
     return vacancies_sort
 
 
@@ -49,24 +62,26 @@ def sort_salary(vacancies: list) -> list:
     while indicator:
         try:
             #  Цифровое значение
-            salary_for, salary_to = input("Введите диапазон желаемой зарплаты в формате 'от - до':\n").split("-")
-            salary_for = int(salary_for)
-            salary_to = int(salary_to)
+            salary = input("\nВведите диапазон зарплаты в формате 'от - до':\n").replace(" ", "").split("-")
+            if not len(salary) == 0:
+                salary_for = 0
+                salary_to = 10000000000
+            else:
+                salary_for = int(salary[0])
+                salary_to = int(salary[1])
         except ValueError:
             print("Данные внесены не корректно.")
         else:
             if salary_for < salary_to:
                 sort_vacancies = []
                 for vacancy in vacancies:
-                    if salary_for < vacancy.salary_for or salary_for == 0:
-                        if salary_to < vacancy.salary_to or vacancy.salary_to == 0:
+                    if salary_for <= vacancy.salary_for or salary_for == 0:
+                        if salary_to <= vacancy.salary_to or vacancy.salary_to == 0:
                             sort_vacancies.append(vacancy)
                 indicator -= 1  # индикатор для остановки цикла
                 return sort_vacancies
             else:
-                print("Введен некорректный диапазон зарплаты.")
-
-
+                print("\nВведен некорректный диапазон зарплаты.", sep="")
 
 
 def sort_schedule(vacancies: list) -> list:
@@ -77,8 +92,12 @@ def sort_schedule(vacancies: list) -> list:
     """
     indicator = 1
     while indicator:
-        schedule = input("Введите желаемый график работы (Полный, Сменный, Гибкий):\n").title().strip()
-        if schedule in ("Полный", "Сменный", "Гибкий"):
+        schedule = input("Введите желаемый график работы (Полный, Сменный, Гибкий, Удаленный) По умолчанию все валюты: ").title().strip()
+        if not schedule:
+            print("Применен параметр по умолчанию.")
+            indicator -= 1
+            return vacancies
+        if schedule in ("Полный", "Сменный", "Гибкий", "Удаленный"):
             sort_vacancies = []
             for vacancy in vacancies:
                 vacancy_split = vacancy.schedule.split()
@@ -92,27 +111,26 @@ def sort_schedule(vacancies: list) -> list:
 
 def sort_job_title():
     """
-    Загрузка списка по указанной пользователем профессии
-    :param API: откуда изымать данные
-    :return: конвертированный список вакансий
+    Загрузка списка по указанной пользователем профессии и вывод пользователю
     """
-    job_title = input("Введите название профессии которую ищите: ")
-    id = id_area()
+    job_title = input("\nВведите название профессии которую ищите: ")
+    area = id_area()
     hh = HeadHunterAPI()
-    hh.get_params = [job_title, id]
+    hh.get_params = [job_title, area]
     hh_vacancies = hh.load_vacancies()
     vacancies_convert = hh.cast_to_object_list(hh_vacancies)
     file_saver = HHSaver()
     file_saver.vacancy_add(vacancies_convert)
     load_vacancies = file_saver.vacancy_load()
-    if len(load_vacancies) != 0:
-        sorted_currency = sort_currency(load_vacancies)
-        sorted_salary = sort_salary(sorted_currency)
-        print(sorted_salary)
-        sorted_schedule = sort_schedule(sorted_salary)
-        print(sorted_schedule)
-        for vacancy in sorted(sorted_schedule):
-            print(vacancy)
+    sorted_currency = sort_currency(load_vacancies)
+    sorted_salary = sort_salary(sorted_currency)
+    sorted_schedule = sort_schedule(sorted_salary)
+    if len(sorted_schedule) != 0:
+        print(f"\n\nПо вашему запросу найдено {len(sorted_schedule)} вакансий:")
+        sorted_vacancies = sorted(sorted_schedule, reverse=True)
+        for number in range(0, len(sorted_vacancies)):
+            print(f"\nВакансия № {number + 1}:")
+            print(f"{sorted_vacancies[number]}")
     else:
-        print("По вашему запросу вакансий не найдено")
+        print("\nПо вашему запросу вакансий не найдено")
         quit()

@@ -47,7 +47,7 @@ class Vacancy:
         except ValueError:
             pass
         finally:
-            return (f'Вакансия опубликована {published_at[1]} {days} назад.\n'
+            return (f'Опубликовано {published_at[1]} {days} назад.\n'
                     f'Дата публикации: {published_at[0]} года;\n\n'
                     f'Должность: {self.name};\n'
                     f'Ссылка на вакансию: {self.alternate_url};\n'

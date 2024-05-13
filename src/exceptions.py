@@ -16,12 +16,3 @@ class VacancyDelException(VacancyAddException):
     def __init__(self, *args, **kwargs):
         self.message = args[0] if args else "Указанная вакансия для удаления отсутствует в файле!"
 
-
-class SortJobTitleException(VacancyAddException):
-    """
-    Исключение в случае если вакансии не найдены
-    """
-    def __init__(self, *args, **kwargs):
-        self.message = args[0] if args else "Найдено 0 вакансий"
-
-

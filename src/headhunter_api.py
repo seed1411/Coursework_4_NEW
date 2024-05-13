@@ -20,7 +20,7 @@ class HeadHunterAPI(HH):
 
     def __init__(self):
         self.__url = 'https://api.hh.ru/vacancies'
-        self.__params = {'text': '', 'page': 0, 'per_page': '100'}
+        self.__params = {'text': '', 'page': 0, 'per_page': '100', 'area': ''}
         self.__vacancies = []  # список из вакансий (Объекты класса Vacancy)
 
     def __repr__(self):
