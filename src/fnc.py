@@ -47,8 +47,8 @@ def sort_salary(vacancies: list) -> list:
     """
     indicator = 1
     while indicator:
-            #  Цифровое значение
         try:
+            #  Цифровое значение
             salary_for, salary_to = input("Введите диапазон желаемой зарплаты в формате 'от - до':\n").split("-")
             salary_for = int(salary_for)
             salary_to = int(salary_to)
@@ -75,22 +75,22 @@ def sort_schedule(vacancies: list) -> list:
     :param vacancies: Список вакансий
     :return: Сортированный список вакансий
     """
-    indicator = True
+    indicator = 1
     while indicator:
         schedule = input("Введите желаемый график работы (Полный, Сменный, Гибкий):\n").title().strip()
         if schedule in ("Полный", "Сменный", "Гибкий"):
             sort_vacancies = []
-            indicator = False  # индикатор для остановки цикла
             for vacancy in vacancies:
                 vacancy_split = vacancy.schedule.split()
                 if vacancy_split[0] == schedule:
                     sort_vacancies.append(vacancy)
+            indicator -= 1  # индикатор для остановки цикла
             return sort_vacancies
         else:
             print("Введен некорректный график.\n")
 
 
-def sort_job_title() -> list:
+def sort_job_title():
     """
     Загрузка списка по указанной пользователем профессии
     :param API: откуда изымать данные
