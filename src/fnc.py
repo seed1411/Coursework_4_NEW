@@ -29,8 +29,8 @@ def sort_currency(vacancies) -> list:
     :param vacancies: список вакансий
     :return: отсортированный список вакансий
     """
-    currency = input("Введите валюту зарплаты (RUR, KZT, BYR, UZS). По умолчанию: RUR: ").upper().strip()
-    if currency in ("RUR", "KZT", "BYR", "UZS"):
+    currency = input("Введите валюту зарплаты (RUR, KZT, BYR, UZS, USD). По умолчанию: RUR: ").upper().strip()
+    if currency in ("RUR", "KZT", "BYR", "UZS", "USD"):
         currency_correct = currency
     else:
         print("Введена некорректная валюта. Применена валюта по умолчанию: RUR")
@@ -45,28 +45,26 @@ def sort_salary(vacancies: list) -> list:
     :param vacancies: список вакансий
     :return: сортированный список вакансий
     """
-    sindicator = True
-    sort_vacancies = []
+    indicator = 1
     while indicator:
-        try:
             #  Цифровое значение
+        try:
             salary_for, salary_to = input("Введите диапазон желаемой зарплаты в формате 'от - до':\n").split("-")
             salary_for = int(salary_for)
             salary_to = int(salary_to)
         except ValueError:
-            print("Данные внесены не корректно. Введите диапазон зарплаты в формате 'от - до'")
+            print("Данные внесены не корректно.")
         else:
             if salary_for < salary_to:
-                indicator = False  # индикатор для остановки цикла
+                sort_vacancies = []
                 for vacancy in vacancies:
-                    if salary_for > vacancy["salary_for"] or salary_for == 0:
-                        if salary_to < vacancy["salary_to"] or vacancy["salary_to"] == 0:
+                    if salary_for < vacancy.salary_for or salary_for == 0:
+                        if salary_to < vacancy.salary_to or vacancy.salary_to == 0:
                             sort_vacancies.append(vacancy)
-                            return sort_vacancies
-
+                indicator -= 1  # индикатор для остановки цикла
+                return sort_vacancies
             else:
                 print("Введен некорректный диапазон зарплаты.")
-                continue
 
 
 
@@ -77,17 +75,17 @@ def sort_schedule(vacancies: list) -> list:
     :param vacancies: Список вакансий
     :return: Сортированный список вакансий
     """
-    sort_vacancies = []
     indicator = True
     while indicator:
         schedule = input("Введите желаемый график работы (Полный, Сменный, Гибкий):\n").title().strip()
         if schedule in ("Полный", "Сменный", "Гибкий"):
+            sort_vacancies = []
             indicator = False  # индикатор для остановки цикла
             for vacancy in vacancies:
                 vacancy_split = vacancy.schedule.split()
                 if vacancy_split[0] == schedule:
                     sort_vacancies.append(vacancy)
-                    return sort_vacancies
+            return sort_vacancies
         else:
             print("Введен некорректный график.\n")
 
