@@ -1,5 +1,7 @@
 from datetime import date
 
+from src.fnc_color import out_red_text, out_blue_text
+
 
 class Vacancy:
     """
@@ -27,35 +29,35 @@ class Vacancy:
         return f"""{self.__class__.__name__}({self.published_at},{self.name}, {self.alternate_url}, {self.area}, {self.currency}, {self.salary_for}, {self.salary_to}, {self.schedule}, {self.requirement}, {self.responsibility})"""
 
     def __str__(self):
-        global published_at, days
-        salary_range = f"Зарплата от {self.salary_for} до {self.salary_to} {self.currency }"
+
+        salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} до {self.salary_to} {self.currency }"
         if not self.salary_for:
-            salary_range = f"Зарплата до {self.salary_to} {self.currency}"
+            salary_range = f"{out_blue_text("Зарплата:")} до {self.salary_to} {self.currency}"
         elif not self.salary_to:
-            salary_range = f"Зарплата от {self.salary_for} {self.currency}"
+            salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} {self.currency}"
         elif self.salary_for == 0 and self.salary_to == 0:
-            salary_range = "Зарплата не указана"
-        try:
-            published_at = self.published_at_correct(self.published_at)
-            days = ""
-            if int(published_at[1]) in range(5, 21) or int(published_at[1]) in range(1005, 1021) or int(published_at[1]) % 10 in range(5,10) or int(published_at[1]) % 10 == 0:
-                days = "дней"
-            elif int(published_at[1]) % 10 in (2, 3, 4):
-                days = "дня"
-            elif int(published_at[1]) % 10 in (1, 1001):
-                days = "день"
-        except ValueError:
-            pass
-        finally:
-            return (f'Опубликовано {published_at[1]} {days} назад.\n'
-                    f'Дата публикации: {published_at[0]} года;\n\n'
-                    f'Должность: {self.name};\n'
-                    f'Ссылка на вакансию: {self.alternate_url};\n'
-                    f'Город: {self.area};\n'
-                    f'{salary_range};\n'
-                    f'График работы: {self.schedule};\n'
-                    f'Требования к кандидату: {self.requirement};\n'
-                    f'Обязанности: {self.responsibility};\n\n\n')
+            salary_range = {out_blue_text("Зарплата не указана;")}
+
+        published_at = self.published_at_correct(self.published_at)
+        day = int(published_at[1])
+        days_ago = None
+        if day == 0:
+            days_ago = f"Опубликовано сегодня. {out_red_text("ОТКЛИКАЙСЯ ПОКА НОВАЯ!!!")}\n"
+        elif day in range(5, 21) or day in range(1005, 1021) or day % 10 in range(5, 10) or day % 10 == 0:
+            days_ago = f"Опубликовано {published_at[1]} дней назад.\n"
+        elif day % 10 in (2, 3, 4):
+            days_ago = f"Опубликовано {published_at[1]} дня назад.\n"
+        elif day % 10 in (1, 1001):
+            days_ago = f"Опубликовано {published_at[1]} день назад.\n"
+        return (f'{days_ago}'
+                f'Дата публикации: {published_at[0]} года;\n\n'
+                f'{out_blue_text("Должность:")} {self.name};\n'
+                f'{out_blue_text("Ссылка на вакансию:")} {self.alternate_url};\n'
+                f'{out_blue_text("Город:")} {self.area};\n'
+                f'{salary_range};\n'
+                f'{out_blue_text("График работы:")} {self.schedule};\n'
+                f'{out_blue_text("Требования к кандидату:")} {self.requirement};\n'
+                f'{out_blue_text("Обязанности:")} {self.responsibility};\n\n\n')
 
     def __eq__(self, other):
         return self.salary_for == other.salary_for
@@ -76,5 +78,5 @@ class Vacancy:
         published_date = value
         date_convert = date(int(published_date[:4]), int(published_date[5:7]), int(published_date[8:10]))
         date_now = date.today()
-        day_difference = str(date_now - date_convert).split()
-        return date_convert.strftime("%d.%m.%Y"), day_difference[0]
+        day_difference = (date_now - date_convert).days
+        return date_convert.strftime("%d.%m.%Y"), day_difference
