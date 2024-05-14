@@ -1,6 +1,7 @@
 from pytest import fixture
 from src.vacancy import Vacancy
 from src.headhunter_api import HeadHunterAPI
+from src.exceptions import VacancyAddException, VacancyDelException
 
 
 
@@ -46,3 +47,23 @@ def headhunter_api_3():
     headhunter.get_params = ["python", 113]
     vacancies_list = headhunter.load_vacancies()
     return vacancies_list
+
+
+@fixture
+def ExceptionAdd_1():
+    return VacancyAddException()
+
+
+@fixture
+def ExceptionAdd_2():
+    return VacancyAddException("TEST")
+
+
+@fixture
+def ExceptionDel_1():
+    return VacancyDelException()
+
+
+@fixture
+def ExceptionDel_2():
+    return VacancyDelException("TEST")
