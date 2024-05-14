@@ -1,5 +1,6 @@
 from pytest import fixture
 from src.vacancy import Vacancy
+from src.headhunter_api import HeadHunterAPI
 
 
 
@@ -10,7 +11,7 @@ def vacancy_1():
 
 @fixture
 def vacancy_2():
-    return Vacancy("2024-02-05", "test_2", "test_2", "test_2", "USD", 0, 1, "Сменный", "test_2", "test_2")
+    return Vacancy("ff", "test_2", "test_2", "test_2", "USD", 0, 1, "Сменный", "test_2", "test_2")
 
 
 @fixture
@@ -21,3 +22,27 @@ def vacancy_3():
 @fixture
 def vacancy_4():
     return Vacancy("2024-02-05", "test_4", "test_4", "test_4", "USD", 1, 1, "Удаленный", "test_4", "test_4")
+
+
+@fixture
+def vacancy_5():
+    return Vacancy("TEST", "test_4", "test_4", "test_4", "USD", 1, 1, "Удаленный", "test_4", "test_4")
+
+@fixture
+def headhunter_api_1():
+    return HeadHunterAPI()
+
+
+@fixture
+def headhunter_api_2():
+    headhunter = HeadHunterAPI()
+    headhunter.get_params = ["python", 113]
+    return headhunter
+
+
+@fixture
+def headhunter_api_3():
+    headhunter = HeadHunterAPI()
+    headhunter.get_params = ["python", 113]
+    vacancies_list = headhunter.load_vacancies()
+    return vacancies_list

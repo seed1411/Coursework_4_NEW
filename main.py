@@ -1,9 +1,6 @@
-from src.fnc import sort_job_title
+from src.fnc_sorted import print_vacancies
 
-
-# Запуск приложения.
-sort_job_title()
-
-
+# Запуск приложения
+print_vacancies()
 
 

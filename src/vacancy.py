@@ -9,13 +9,11 @@ class Vacancy:
     ссылки на вакансию, место работы (город), валюта оплаты, зарплата от, зарплата до,
     график работы, требования к работнику, обязанности по вакансии
     """
-    __slots__ = (
-        'published_at', 'name', 'alternate_url', 'area', 'currency', 'salary_for', "salary_to", 'schedule', 'requirement', 'responsibility')
+    __slots__ = ('published_at', 'name', 'alternate_url', 'area', 'currency', 'salary_for', "salary_to", 'schedule', 'requirement', 'responsibility')
 
-    def __init__(self, published_at, name, alternate_url, area, currency, salary_for, salary_to, schedule, requirement,
-                 responsibility):
+    def __init__(self, published_at, name, alternate_url, area, currency, salary_for, salary_to, schedule, requirement, responsibility):
         self.published_at = published_at  # дата публикации
-        self.name = name if name is not None else "Не указана" # Должность
+        self.name = name if name is not None else "Не указана"  # Должность
         self.alternate_url = alternate_url if alternate_url is not None else "Не указана"  # Ссылка на вакансию
         self.area = area if area is not None else "Не указано"  # место работы (город)
         self.currency = currency if currency is not None else "Не указана"  # валюта
@@ -39,18 +37,21 @@ class Vacancy:
             salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} {self.currency}"
 
         published_at = self.published_at_correct(self.published_at)
-        day = int(published_at[1])
         days_ago = None
-        if day == 0:
-            days_ago = f"Опубликовано сегодня. {out_red_text("БУДЬ ПЕРВЫМ!!!")}\n"
-        elif day in range(5, 21) or day in range(1005, 1021) or day % 10 in range(5, 10) or day % 10 == 0:
-            days_ago = f"Опубликовано {published_at[1]} дней назад.\n"
-        elif day % 10 in (2, 3, 4):
-            days_ago = f"Опубликовано {published_at[1]} дня назад.\n"
-        elif day % 10 in (1, 1001):
-            days_ago = f"Опубликовано {published_at[1]} день назад.\n"
+        if not published_at:
+            days_ago = "Дата публикации не указана.\n\n"
+        else:
+            day = int(published_at[1])
+
+            if day == 0:
+                days_ago = f"Опубликовано сегодня. {out_red_text("БУДЬ ПЕРВЫМ!!!")}\nДата публикации: {published_at[0]} года;\n\n"
+            elif day in range(5, 21) or day in range(1005, 1021) or day % 10 in range(5, 10) or day % 10 == 0:
+                days_ago = f"Опубликовано {published_at[1]} дней назад.\nДата публикации: {published_at[0]} года;\n\n"
+            elif day % 10 in (2, 3, 4):
+                days_ago = f"Опубликовано {published_at[1]} дня назад.\nДата публикации: {published_at[0]} года;\n\n"
+            elif day % 10 in (1, 1001):
+                days_ago = f"Опубликовано {published_at[1]} день назад.\nДата публикации: {published_at[0]} года;\n\n'"
         return (f'{days_ago}'
-                f'Дата публикации: {published_at[0]} года;\n\n'
                 f'{out_blue_text("Должность:")} {self.name};\n'
                 f'{out_blue_text("Ссылка на вакансию:")} {self.alternate_url};\n'
                 f'{out_blue_text("Город:")} {self.area};\n'
@@ -76,7 +77,11 @@ class Vacancy:
         :return: кортеж из двух значений дату в формате ДД.ММ.ГГ и сколько дней назад выложено
         """
         published_date = value
-        date_convert = date(int(published_date[:4]), int(published_date[5:7]), int(published_date[8:10]))
-        date_now = date.today()
-        day_difference = (date_now - date_convert).days
-        return date_convert.strftime("%d.%m.%Y"), day_difference
+        try:
+            date_convert = date(int(published_date[:4]), int(published_date[5:7]), int(published_date[8:10]))
+        except ValueError:
+            return 0
+        else:
+            date_now = date.today()
+            day_difference = (date_now - date_convert).days
+            return date_convert.strftime("%d.%m.%Y"), day_difference

@@ -24,7 +24,7 @@ class HeadHunterAPI(HH):
         self.__vacancies = []  # список из вакансий (Объекты класса Vacancy)
 
     def __repr__(self):
-        return f'url = {self.__url}, params = text: {self.__params["text"]}, page: {self.__params["page"]}, per_page: {self.__params["per_page"]}'
+        return f'url = {self.__url}, params = text: {self.__params["text"]}, page: {self.__params["page"]}, per_page: {self.__params["per_page"]}, area: {self.__params["area"]}'
 
     @property
     def get_params(self):

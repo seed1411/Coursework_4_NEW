@@ -1,5 +1,7 @@
 from datetime import date
 
+import pytest
+
 
 def test_init(vacancy_1):
     assert vacancy_1.published_at == "2024-01-01"
@@ -18,9 +20,10 @@ def test_repr(vacancy_1):
     assert repr(vacancy_1) == 'Vacancy(2024-01-01, test_1, test_1, test_1, RUR, 0, 0, Полный, test_1, test_1)'
 
 
-def test_published_at_correct(vacancy_1):
+def test_published_at_correct(vacancy_1, vacancy_5):
     today = (date.today() - date(2024, 1, 1)).days
     assert vacancy_1.published_at_correct(vacancy_1.published_at) == ("01.01.2024", today)
+    assert vacancy_5.published_at_correct(vacancy_5.published_at) == 0
 
 
 def test_str_salary(vacancy_1, vacancy_2, vacancy_3, vacancy_4):
