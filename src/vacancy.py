@@ -26,17 +26,17 @@ class Vacancy:
         self.responsibility = responsibility if responsibility is not None else "Не указаны"  # обязанности по вакансии
 
     def __repr__(self):
-        return f"""{self.__class__.__name__}({self.published_at},{self.name}, {self.alternate_url}, {self.area}, {self.currency}, {self.salary_for}, {self.salary_to}, {self.schedule}, {self.requirement}, {self.responsibility})"""
+        return f"""{self.__class__.__name__}({self.published_at}, {self.name}, {self.alternate_url}, {self.area}, {self.currency}, {self.salary_for}, {self.salary_to}, {self.schedule}, {self.requirement}, {self.responsibility})"""
 
     def __str__(self):
 
-        salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} до {self.salary_to} {self.currency }"
-        if not self.salary_for:
+        salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} до {self.salary_to} {self.currency}"
+        if self.salary_for == 0 and self.salary_to == 0:
+            salary_range = {out_blue_text("Зарплата не указана;")}
+        elif not self.salary_for:
             salary_range = f"{out_blue_text("Зарплата:")} до {self.salary_to} {self.currency}"
         elif not self.salary_to:
             salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} {self.currency}"
-        elif self.salary_for == 0 and self.salary_to == 0:
-            salary_range = {out_blue_text("Зарплата не указана;")}
 
         published_at = self.published_at_correct(self.published_at)
         day = int(published_at[1])
@@ -72,7 +72,7 @@ class Vacancy:
     def published_at_correct(value):
         """
         Преобразует дату публикации в нужный формат
-        :param value: Исходное значение даны, загруженное из HeadHunter API
+        :param value: Исходное значение даты, загруженное из HeadHunter API
         :return: кортеж из двух значений дату в формате ДД.ММ.ГГ и сколько дней назад выложено
         """
         published_date = value
