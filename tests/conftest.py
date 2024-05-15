@@ -1,8 +1,9 @@
+from pathlib import Path
 from pytest import fixture
 from src.vacancy import Vacancy
 from src.headhunter_api import HeadHunterAPI
+from src.file_saver import HHSaver
 from src.exceptions import VacancyAddException, VacancyDelException
-
 
 
 @fixture
@@ -50,20 +51,33 @@ def headhunter_api_3():
 
 
 @fixture
-def ExceptionAdd_1():
+def exception_add_1():
     return VacancyAddException()
 
 
 @fixture
-def ExceptionAdd_2():
+def exception_add_2():
     return VacancyAddException("TEST")
 
 
 @fixture
-def ExceptionDel_1():
+def exception_del_1():
     return VacancyDelException()
 
 
 @fixture
-def ExceptionDel_2():
+def exception_del_2():
     return VacancyDelException("TEST")
+
+
+@fixture
+def file_saver_1():
+    return HHSaver()
+
+
+@fixture
+def file_saver_2():
+    hh_saver = HHSaver()
+    with open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), "w", encoding="utf-8") as file:
+        file.write("")
+        return hh_saver

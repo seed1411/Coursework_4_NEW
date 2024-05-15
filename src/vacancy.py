@@ -58,7 +58,7 @@ class Vacancy:
             elif day % 10 in (2, 3, 4):
                 days_ago = f"Опубликовано {published_at[1]} дня назад.\nДата публикации: {published_at[0]} года;\n\n"
             elif day % 10 in (1, 1001):
-                days_ago = f"Опубликовано {published_at[1]} день назад.\nДата публикации: {published_at[0]} года;\n\n'"
+                days_ago = f"Опубликовано {published_at[1]} день назад.\nДата публикации: {published_at[0]} года;\n\n"
         return (f'{days_ago}'
                 f'{out_blue_text("Должность:")} {self.name};\n'
                 f'{out_blue_text("Ссылка на вакансию:")} {self.alternate_url};\n'
