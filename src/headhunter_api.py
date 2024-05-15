@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from src.vacancy import Vacancy
 
 
-class HH(ABC):
+class API(ABC):
     """
     Выгрузка вакансий из сторонних API
     """
@@ -12,7 +12,7 @@ class HH(ABC):
         pass
 
 
-class HeadHunterAPI(HH):
+class HeadHunterAPI(API):
     """
     Класс загрузки вакансий с HeadHunter`а
     """

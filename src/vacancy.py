@@ -14,16 +14,26 @@ class Vacancy:
         """
         Инициализация класса Vacancy
         """
-        self.published_at = published_at  # дата публикации
-        self.name = name if name is not None else "Не указана"  # Должность
-        self.alternate_url = alternate_url if alternate_url is not None else "Не указана"  # Ссылка на вакансию
-        self.area = area if area is not None else "Не указано"  # место работы (город)
-        self.currency = currency if currency is not None else "Не указана"  # валюта
-        self.salary_for = salary_for if isinstance(salary_for, int) else 0  # Зарплата "от"
-        self.salary_to = salary_to if isinstance(salary_to, int) else 0  # Зарплата "от"
-        self.schedule = schedule if schedule is not None else "Не указан"  # график занятости
-        self.requirement = requirement if requirement is not None else "Не указано"  # требования к работнику
-        self.responsibility = responsibility if responsibility is not None else "Не указаны"  # обязанности по вакансии
+        # Дата публикации
+        self.published_at = published_at
+        # Должность
+        self.name = name if name is not None else "Не указана"
+        # Ссылка на вакансию
+        self.alternate_url = alternate_url if alternate_url is not None else "Не указана"
+        # место работы (город)
+        self.area = area if area is not None else "Не указано"
+        # Валюта
+        self.currency = currency if currency is not None else "Не указана"
+        # Зарплата "от"
+        self.salary_for = salary_for if isinstance(salary_for, int) else 0
+        # Зарплата "до"
+        self.salary_to = salary_to if isinstance(salary_to, int) else 0
+        # График занятости
+        self.schedule = schedule if schedule is not None else "Не указан"
+        # Требования к работнику
+        self.requirement = requirement if requirement is not None else "Не указано"
+        # Обязанности по вакансии
+        self.responsibility = responsibility if responsibility is not None else "Не указаны"
 
     def __repr__(self) -> str:
         """
