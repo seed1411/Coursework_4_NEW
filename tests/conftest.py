@@ -81,3 +81,13 @@ def file_saver_2():
     with open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), "w", encoding="utf-8") as file:
         file.write("")
         return hh_saver
+
+
+@fixture
+def list_sorted():
+    return [
+        Vacancy("2024-01-01", "test_1", "test_1", "test_1", "RUR", 1000, 2000, "Полный день", "test_1", "test_1"),
+        Vacancy("2024-02-05", "test_2", "test_2", "test_2", "USD", 2000, 3000, "Сменный график", "test_2", "test_2"),
+        Vacancy("2024-02-05", "test_3", "test_3", "test_3", "KZT", 3000, 4000, "Гибкий график", "test_3", "test_4"),
+        Vacancy("2024-02-05", "test_4", "test_4", "test_4", "USD", 4000, 5000, "Удаленная работа", "test_4", "test_4")
+    ]

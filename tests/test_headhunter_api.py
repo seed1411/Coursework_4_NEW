@@ -43,3 +43,4 @@ def test_cast_to_object_list(headhunter_api_1, headhunter_api_3):
     with pytest.raises(AttributeError):
         for vacancy in vacancies:
             vacancy.get("salary").get("from")
+

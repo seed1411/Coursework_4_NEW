@@ -21,7 +21,6 @@ def id_area() -> str:
                 return response_json[value]['id']
         else:  # если введенная страна отсутствует в базе данных
             print("Вакансий для трудоустройства в данной стране нет. Выберите другую страну: ")
-            continue
 
 
 def sort_currency(vacancies) -> list:
@@ -134,7 +133,7 @@ def sort_top(vacancies):
                 print(out_incorrect_input_text("Введите число!\n"))
             else:
                 if top > len(vacancies):  # если пользователь ввел число больше чем найдено вакансий
-                    print("Показаны все найденные вакансии.")
+                    print("\nПоказаны все найденные вакансии.")
                     return vacancies
                 else:
                     print(f"\nПоказано ТОП-{top}:")
