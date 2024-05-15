@@ -36,7 +36,7 @@ def sort_currency(vacancies) -> list:
     while indicator:
         currency = input("\nВведите интересующие валюты зарплаты: (По умолчанию RUR), KZT, BYR, UZS, USD, KGS): ").replace(",", " ").upper().strip(" ,.:;!-").split()
         if not len(currency):
-            print(out_emphasized_text("Применена валюта по умолчанию."))
+            print(out_emphasized_text("Применена валюта по умолчанию"))
             return vacancies
         else:
             for item in currency:
@@ -68,7 +68,7 @@ def sort_salary(vacancies: list) -> list:
             #  Цифровое значение
             salary = input("\nВведите минимальную зарплату: ").replace(" ", "").strip(" ,.:;!-")
             if salary == "":
-                print(out_emphasized_text("Применены параметры по умолчанию."))
+                print(out_emphasized_text("Применены параметры по умолчанию"))
                 salary_for = 0
             else:
                 salary_for = int(salary)
@@ -92,9 +92,9 @@ def sort_schedule(vacancies: list) -> list:
     sort_vacancies = []
     indicator = 1  # индикатор цикла
     while indicator:
-        schedule = input("\nВведите желаемый график работы (Полный, Сменный, Гибкий, Удаленный) По умолчанию - Все: ").replace(",", " ").title().strip(" ,.:;!-").split()
+        schedule = input("\nВведите желаемый график работы (Полный, Сменный, Гибкий, Удаленная) По умолчанию - Все: ").replace(",", " ").title().strip(" ,.:;!-").split()
         if not len(schedule):
-            print(out_emphasized_text("Применен параметр по умолчанию."))
+            print(out_emphasized_text("Применен параметр по умолчанию"))
             indicator -= 1  # индикатор для остановки цикла
             return vacancies
         else:
@@ -102,7 +102,7 @@ def sort_schedule(vacancies: list) -> list:
                 if item in (",", "-", ".", ":", ";"):
                     schedule.remove(item)
             for value in schedule:
-                if value in ("Полный", "Сменный", "Гибкий", "Удаленный"):
+                if value in ("Полный", "Сменный", "Гибкий", "Удаленная"):
                     for vacancy in vacancies:
                         vacancy_split = vacancy.schedule.split()
                         if vacancy_split[0] == value:
@@ -125,7 +125,7 @@ def sort_top(vacancies):
     while True:
         top_user = input("Сколько показать вакансий? По умолчанию - Все; ").strip(" ,.:;")
         if not top_user:
-            print(f"{out_emphasized_text("Применен параметр по умолчанию.")}\n\nПоказаны все найденные вакансии.")
+            print(f"{out_emphasized_text("Применен параметр по умолчанию")}\n\nПоказаны все найденные вакансии.")
             return vacancies
         elif top_user > str(len(vacancies)):
             print("Показаны все найденные вакансии.")
@@ -159,8 +159,7 @@ def print_vacancies():
     sorted_schedule = sort_schedule(sorted_salary)
     if len(sorted_schedule) != 0:
         print(f"\nПо вашему запросу найдено {len(sorted_schedule)} вакансий.")
-        sorted_vacancies = sorted(sorted_schedule, reverse=True)
-        sorted_top = sort_top(sorted_vacancies)
+        sorted_top = sort_top(sorted(sorted_schedule, reverse=True))
         for number in range(0, len(sorted_top)):
             print(f"\nВакансия № {number + 1}:\n{sorted_top[number]}")
     else:
