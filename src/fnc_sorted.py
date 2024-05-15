@@ -1,5 +1,6 @@
 import requests
 from src.file_saver import HHSaver
+from src.fnc_color import out_emphasized_text, out_incorrect_input_text
 from src.headhunter_api import HeadHunterAPI
 
 
@@ -35,7 +36,7 @@ def sort_currency(vacancies) -> list:
     while indicator:
         currency = input("\nВведите интересующие валюты зарплаты: (По умолчанию RUR), KZT, BYR, UZS, USD, KGS): ").replace(",", " ").upper().strip(" ,.:;!-").split()
         if not len(currency):
-            print("Применена валюта по умолчанию.")
+            print(out_emphasized_text("Применена валюта по умолчанию."))
             return vacancies
         else:
             for item in currency:
@@ -50,7 +51,7 @@ def sort_currency(vacancies) -> list:
                 else:
                     indicator = True  # индикатор цикла
                     vacancies_sort = []
-                    print("Введена некорректная валюта!\n")
+                    print(out_incorrect_input_text("Введена некорректная валюта!\n"))
                     break
     return vacancies_sort
 
@@ -67,12 +68,12 @@ def sort_salary(vacancies: list) -> list:
             #  Цифровое значение
             salary = input("\nВведите минимальную зарплату: ").replace(" ", "").strip(" ,.:;!-")
             if salary == "":
-                print("Применены параметры по умолчанию.")
+                print(out_emphasized_text("Применены параметры по умолчанию."))
                 salary_for = 0
             else:
                 salary_for = int(salary)
         except ValueError:
-            print("Введите число!")
+            print(out_incorrect_input_text("Введите число!"))
         else:
             sort_vacancies = []
             for vacancy in vacancies:
@@ -93,7 +94,7 @@ def sort_schedule(vacancies: list) -> list:
     while indicator:
         schedule = input("\nВведите желаемый график работы (Полный, Сменный, Гибкий, Удаленный) По умолчанию - Все: ").replace(",", " ").title().strip(" ,.:;!-").split()
         if not len(schedule):
-            print("Применен параметр по умолчанию.")
+            print(out_emphasized_text("Применен параметр по умолчанию."))
             indicator -= 1  # индикатор для остановки цикла
             return vacancies
         else:
@@ -110,7 +111,7 @@ def sort_schedule(vacancies: list) -> list:
                 else:
                     indicator = 1  # индикатор цикла
                     sort_vacancies = []
-                    print("Введен некорректный график!\n")
+                    print(out_incorrect_input_text("Введен некорректный график!\n"))
     return sort_vacancies
 
 
@@ -124,7 +125,7 @@ def sort_top(vacancies):
     while True:
         top_user = input("Сколько показать вакансий? По умолчанию - Все; ").strip(" ,.:;")
         if not top_user:
-            print("Применен параметр по умолчанию.\n\nПоказаны все найденные вакансии.")
+            print(f"{out_emphasized_text("Применен параметр по умолчанию.")}\n\nПоказаны все найденные вакансии.")
             return vacancies
         elif top_user > str(len(vacancies)):
             print("Показаны все найденные вакансии.")
@@ -133,7 +134,7 @@ def sort_top(vacancies):
             try:
                 top = int(top_user)
             except ValueError:
-                print("Введите число!\n")
+                print(out_incorrect_input_text("Введите число!\n"))
             else:
                 print(f"\nПоказано ТОП-{top}:")
                 return vacancies[:top]
@@ -157,7 +158,7 @@ def print_vacancies():
     sorted_salary = sort_salary(sorted_currency)
     sorted_schedule = sort_schedule(sorted_salary)
     if len(sorted_schedule) != 0:
-        print(f"\n\nПо вашему запросу найдено {len(sorted_schedule)} вакансий.")
+        print(f"\nПо вашему запросу найдено {len(sorted_schedule)} вакансий.")
         sorted_vacancies = sorted(sorted_schedule, reverse=True)
         sorted_top = sort_top(sorted_vacancies)
         for number in range(0, len(sorted_top)):
