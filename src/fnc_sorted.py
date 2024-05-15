@@ -127,17 +127,18 @@ def sort_top(vacancies):
         if not top_user:  # если пользователь не ввел число
             print(f"{out_emphasized_text("Применен параметр по умолчанию")}\n\nПоказаны все найденные вакансии.")
             return vacancies
-        elif top_user > str(len(vacancies)):  # если пользователь ввел число больше чем найдено вакансий
-            print("Показаны все найденные вакансии.")
-            return vacancies
         else:  # если пользователь ввел число в диапазоне найденных вакансий
             try:
                 top = int(top_user)
             except ValueError:
                 print(out_incorrect_input_text("Введите число!\n"))
             else:
-                print(f"\nПоказано ТОП-{top}:")
-                return vacancies[:top]
+                if top > len(vacancies):  # если пользователь ввел число больше чем найдено вакансий
+                    print("Показаны все найденные вакансии.")
+                    return vacancies
+                else:
+                    print(f"\nПоказано ТОП-{top}:")
+                    return vacancies[:top]
 
 
 def print_vacancies():
