@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+import pytest
+from src.exceptions import VacancyAddException, VacancyDelException
 
 
 def test_init(file_saver_1):
@@ -37,6 +39,9 @@ def test_vacancy_add(file_saver_2, vacancy_1, vacancy_2, headhunter_api_1):
         profile_1 = file.read()
     assert len(profile_1) > 1
 
+    with pytest.raises(VacancyAddException):
+        file_saver.vacancy_add(headhunter_api_1)
+
 
 def test_vacancy_load(file_saver_1):
     """
@@ -51,7 +56,12 @@ def test_vacancy_del(file_saver_2, vacancy_1):
     """
     file_saver = file_saver_2
     file_saver.vacancy_add(vacancy_1)
+
+    with pytest.raises(VacancyDelException):
+        file_saver.vacancy_del("sdf")
+
     file_saver.vacancy_del("test_1")
     with open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), encoding="utf-8") as file:
         profile_1 = json.load(file)
     assert len(profile_1) == 0
+
