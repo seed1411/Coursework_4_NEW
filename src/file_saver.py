@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 from abc import ABC, abstractmethod
 from src.vacancy import Vacancy
 from src.exceptions import VacancyAddException, VacancyDelException
@@ -79,14 +79,14 @@ class HHSaver(JSONSaver):
             self.get_vacancies_json = vacancies
         else:
             raise VacancyAddException
-        with open(os.path.join("data", "vacancies_hh"), "w", encoding="utf-8") as file:
+        with open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), "w", encoding="utf-8") as file:
             json.dump(self.__vacancies_json, file, ensure_ascii=False, indent=10)
 
     def vacancy_load(self) -> list:
         """
         Выводит пользователю список всех вакансий HeadHunter'а из файла в виде объекта
         """
-        with (open(os.path.join("data", "vacancies_hh"), encoding="utf-8") as file):
+        with (open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), encoding="utf-8") as file):
             vacancies = json.load(file)
             vacancies_list = []
             for vacancy_1 in vacancies:
@@ -100,7 +100,7 @@ class HHSaver(JSONSaver):
         !!! Удаление происходит по точному названию вакансии!!!
         :param vacancy: Передаваемая вакансия
         """
-        with open(os.path.join("data", "vacancies_hh"), encoding="utf-8") as file:
+        with open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), encoding="utf-8") as file:
             vacancies_list = json.load(file)
             for vac in vacancies_list:
                 if vacancy == vac["name"]:
@@ -108,5 +108,5 @@ class HHSaver(JSONSaver):
                     break
             else:
                 raise VacancyDelException
-            with open(os.path.join("data", "vacancies_hh"), "w", encoding="utf-8") as file_1:
+            with open(Path(__file__).parent.parent.joinpath("data").joinpath("vacancies_hh"), "w", encoding="utf-8") as file_1:
                 json.dump(vacancies_list, file_1, ensure_ascii=False, indent=10)
