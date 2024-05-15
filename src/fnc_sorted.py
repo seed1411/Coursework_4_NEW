@@ -31,7 +31,7 @@ def sort_currency(vacancies) -> list:
     :return: отсортированный список вакансий
     """
     vacancies_sort = []
-    indicator = True
+    indicator = True  # индикатор цикла
     while indicator:
         currency = input("\nВведите интересующие валюты зарплаты: (По умолчанию RUR), KZT, BYR, UZS, USD, KGS): ").replace(",", " ").upper().strip(" ,.:;!-").split()
         if not len(currency):
@@ -43,14 +43,14 @@ def sort_currency(vacancies) -> list:
                     currency.remove(item)
             for value in currency:
                 if value in ("RUR", "KZT", "BYR", "UZS", "USD", "KGS"):
-                    indicator = False
+                    indicator = False  # индикатор для остановки цикла
                     for vacancy in vacancies:
                         if value == vacancy.currency:
                             vacancies_sort.append(vacancy)
                 else:
-                    indicator = True
+                    indicator = True  # индикатор цикла
                     vacancies_sort = []
-                    print("Введена некорректная валюта\n")
+                    print("Введена некорректная валюта!\n")
                     break
     return vacancies_sort
 
@@ -61,7 +61,7 @@ def sort_salary(vacancies: list) -> list:
     :param vacancies: список вакансий
     :return: сортированный список вакансий
     """
-    indicator = 1
+    indicator = 1  # индикатор цикла
     while indicator:
         try:
             #  Цифровое значение
@@ -72,7 +72,7 @@ def sort_salary(vacancies: list) -> list:
             else:
                 salary_for = int(salary)
         except ValueError:
-            print("Данные внесены не корректно.")
+            print("Введите число!")
         else:
             sort_vacancies = []
             for vacancy in vacancies:
@@ -89,12 +89,12 @@ def sort_schedule(vacancies: list) -> list:
     :return: Сортированный список вакансий
     """
     sort_vacancies = []
-    indicator = 1
+    indicator = 1  # индикатор цикла
     while indicator:
         schedule = input("\nВведите желаемый график работы (Полный, Сменный, Гибкий, Удаленный) По умолчанию - Все: ").replace(",", " ").title().strip(" ,.:;!-").split()
         if not len(schedule):
             print("Применен параметр по умолчанию.")
-            indicator -= 1
+            indicator -= 1  # индикатор для остановки цикла
             return vacancies
         else:
             for item in schedule:
@@ -108,9 +108,9 @@ def sort_schedule(vacancies: list) -> list:
                             sort_vacancies.append(vacancy)
                     indicator = 0  # индикатор для остановки цикла
                 else:
-                    indicator = 1
+                    indicator = 1  # индикатор цикла
                     sort_vacancies = []
-                    print("Введен некорректный график.\n")
+                    print("Введен некорректный график!\n")
     return sort_vacancies
 
 
@@ -122,9 +122,12 @@ def sort_top(vacancies):
     :return: Список вакансий с количеством который указал пользователь
     """
     while True:
-        top_user = input("Сколько показать вакансий? По умолчанию - Все; ")
+        top_user = input("Сколько показать вакансий? По умолчанию - Все; ").strip(" ,.:;")
         if not top_user:
-            print("\nПрименен параметр по умолчанию.")
+            print("Применен параметр по умолчанию.\n\nПоказаны все найденные вакансии.")
+            return vacancies
+        elif top_user > str(len(vacancies)):
+            print("Показаны все найденные вакансии.")
             return vacancies
         else:
             try:
@@ -158,10 +161,9 @@ def print_vacancies():
         sorted_vacancies = sorted(sorted_schedule, reverse=True)
         sorted_top = sort_top(sorted_vacancies)
         for number in range(0, len(sorted_top)):
-            print(f"\nВакансия № {number + 1}:")
-            print(f"{sorted_top[number]}")
+            print(f"\nВакансия № {number + 1}:\n{sorted_top[number]}")
     else:
         print("\nПо вашему запросу вакансий не найдено")
-        quit()
+
 
 
