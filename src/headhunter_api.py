@@ -19,6 +19,9 @@ class HeadHunterAPI(HH):
     __slots__ = ()
 
     def __init__(self):
+        """
+        Инициализация класса HeadHunterAPI
+        """
         self.__url = 'https://api.hh.ru/vacancies'
         self.__params = {'text': '', 'page': 0, 'per_page': '100', 'area': ''}
         self.__vacancies = []  # список из вакансий (Объекты класса Vacancy)

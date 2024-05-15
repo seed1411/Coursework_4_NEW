@@ -1,5 +1,4 @@
 from datetime import date
-
 from src.fnc_color import out_red_text, out_blue_text
 
 
@@ -12,6 +11,9 @@ class Vacancy:
     __slots__ = ('published_at', 'name', 'alternate_url', 'area', 'currency', 'salary_for', "salary_to", 'schedule', 'requirement', 'responsibility')
 
     def __init__(self, published_at, name, alternate_url, area, currency, salary_for, salary_to, schedule, requirement, responsibility):
+        """
+        Инициализация класса Vacancy
+        """
         self.published_at = published_at  # дата публикации
         self.name = name if name is not None else "Не указана"  # Должность
         self.alternate_url = alternate_url if alternate_url is not None else "Не указана"  # Ссылка на вакансию
@@ -23,11 +25,17 @@ class Vacancy:
         self.requirement = requirement if requirement is not None else "Не указано"  # требования к работнику
         self.responsibility = responsibility if responsibility is not None else "Не указаны"  # обязанности по вакансии
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """
+        Отладочный вывод класса и атрибутов экземпляра класса
+        """
         return f"""{self.__class__.__name__}({self.published_at}, {self.name}, {self.alternate_url}, {self.area}, {self.currency}, {self.salary_for}, {self.salary_to}, {self.schedule}, {self.requirement}, {self.responsibility})"""
 
-    def __str__(self):
-
+    def __str__(self) -> str:
+        """
+        Вывод пользователю информации о вакансии,
+        с учетом склонения окончаний и количестве дней публикации
+        """
         salary_range = f"{out_blue_text("Зарплата:")} от {self.salary_for} до {self.salary_to} {self.currency}"
         if self.salary_for == 0 and self.salary_to == 0:
             salary_range = {out_blue_text("Зарплата не указана;")}
@@ -60,17 +68,26 @@ class Vacancy:
                 f'{out_blue_text("Требования к кандидату:")} {self.requirement};\n'
                 f'{out_blue_text("Обязанности:")} {self.responsibility};\n\n\n')
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
+        """
+        Проверка зарплат вакансий на равенство
+        """
         return self.salary_for == other.salary_for
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
+        """
+        Проверка зарплат вакансий на то что одна меньше другой
+        """
         return self.salary_for < other.salary_for
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
+        """
+        Проверка зарплат вакансий на то что одна больше другой
+        """
         return self.salary_for > other.salary_for
 
     @staticmethod
-    def published_at_correct(value):
+    def published_at_correct(value) -> tuple:
         """
         Преобразует дату публикации в нужный формат
         :param value: Исходное значение даты, загруженное из HeadHunter API

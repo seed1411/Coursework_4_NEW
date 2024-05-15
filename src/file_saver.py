@@ -12,14 +12,23 @@ class JSONSaver(ABC):
 
     @abstractmethod
     def vacancy_add(self, vacancies):
+        """
+        Добавление вакансии в файл JSON
+        """
         pass
 
     @abstractmethod
     def vacancy_load(self):
+        """
+        Загрузка вакансий из файла JSON
+        """
         pass
 
     @abstractmethod
     def vacancy_del(self, vacancy):
+        """
+        Удаление вакансии из файла JSON
+        """
         pass
 
 
@@ -29,14 +38,23 @@ class HHSaver(JSONSaver):
     """
 
     def __init__(self):
+        """
+        Инициализация класса HHSaver
+        """
         self.__vacancies_json = []
 
     @property
     def get_vacancies_json(self) -> list:
+        """
+        Возвращает список вакансий(Vacancy)
+        """
         return self.__vacancies_json
 
     @get_vacancies_json.setter
     def get_vacancies_json(self, value: Vacancy):
+        """
+        Внесение изменений в атрибут __vacancies_json
+        """
         self.__vacancies_json.append({
             "published_at": value.published_at,
             "name": value.name,
@@ -52,7 +70,7 @@ class HHSaver(JSONSaver):
 
     def vacancy_add(self, vacancies: (list, Vacancy)):
         """
-        Запись вакансии в файл JSON
+        Запись вакансии HeadHunter в файл JSON
         """
         if type(vacancies) is list:
             for vacancy in vacancies:
@@ -66,7 +84,7 @@ class HHSaver(JSONSaver):
 
     def vacancy_load(self) -> list:
         """
-        Выводит пользователю список всех вакансий из файла в виде объекта
+        Выводит пользователю список всех вакансий HeadHunter'а из файла в виде объекта
         """
         with (open(os.path.join("data", "vacancies_hh"), encoding="utf-8") as file):
             vacancies = json.load(file)
@@ -77,8 +95,9 @@ class HHSaver(JSONSaver):
 
     def vacancy_del(self, vacancy: str):
         """
-        Удаляет вакансию из файла. В случае отсутствия удаляемой вакансии в файле выдает ошибку VacancyDelException
-        Удаление происходит по точному названию вакансии!!!
+        Удаляет вакансию HeadHunter'а из файла.
+        В случае отсутствия удаляемой вакансии в файле выдает ошибку VacancyDelException
+        !!! Удаление происходит по точному названию вакансии!!!
         :param vacancy: Передаваемая вакансия
         """
         with open(os.path.join("data", "vacancies_hh"), encoding="utf-8") as file:
